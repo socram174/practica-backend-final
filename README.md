@@ -25,3 +25,7 @@ y finalmente para iniciar el servidor en el puerto 3000 (esto siempre desde la c
 
 Como opción voy a dejar el backend corriendo en la nube (render.com) por si la configuración de mongodb no funciona correctamente.
 La version del backend de la nube siempre se actualiza automaticamente cuando se hace un push o pull request a la rama master, por lo que siempre sera la version mas nueva.
+
+## https://practica3-qa4b.onrender.com
+## https://practica3-qa4b.onrender.com/users
+## https://practica3-qa4b.onrender.com/books

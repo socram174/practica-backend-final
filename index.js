@@ -6,6 +6,11 @@ import User from "./models/User.js";
 import Book from "./models/Book.js";
 
 
+//Ruta base
+app.get('/', (req, res) => {
+    res.send('API de la biblioteca')
+  });
+
 // Obtener usuarios
 app.get('/users', async function(req, res) {
 
