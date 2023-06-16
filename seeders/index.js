@@ -1,95 +1,85 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 import User from '../models/User.js';
-import Book from '../models/Book.js';
+import Dish from '../models/Dish.js';
 import Rental from '../models/Rental.js';
 
 
-// 5 libros
-const booksSeed = [
+// 10 comidas
+const dishesSeed = [
     {
-        code: "COD-1",
-        book: "Libro 1",
-        description: "descripcion del libro 1",
-        people : []
+        name: "Comida 1",
+        price: 40,
+        clients: []
     },
     {
-        code: "COD-2",
-        book: "Libro 2",
-        description: "descripcion del libro 2",
-        people : []
+        name: "Comida 2",
+        price: 37,
+        clients: []
     },
     {
-        code: "COD-3",
-        book: "Libro 3",
-        description: "descripcion del libro 3",
-        people : []
+        name: "Comida 3",
+        price: 29,
+        clients: []
     },
     {
-        code: "COD-4",
-        book: "Libro 4",
-        description: "descripcion del libro 4",
-        people : []
+        name: "Comida 4",
+        price: 90,
+        clients: []
     },
     {
-        code: "COD-5",
-        book: "Libro 5",
-        description: "descripcion del libro 5",
-        people : []
+        name: "Comida 5",
+        price: 12,
+        clients: []
     },
     {
-        code: "COD-6",
-        book: "Libro 6",
-        description: "descripcion del libro 6",
-        people : []
+        name: "Comida 6",
+        price: 35,
+        clients: []
     },
     {
-        code: "COD-7",
-        book: "Libro 7",
-        description: "descripcion del libro 7",
-        people : []
+        name: "Comida 7",
+        price: 1,
+        clients: []
     },
     {
-        code: "COD-8",
-        book: "Libro 8",
-        description: "descripcion del libro 8",
-        people : []
+        name: "Comida 8",
+        price: 78,
+        clients: []
     },
     {
-        code: "COD-9",
-        book: "Libro 9",
-        description: "descripcion del libro 9",
-        people : []
+        name: "Comida 9",
+        price: 34,
+        clients: []
     },
     {
-        code: "COD-10",
-        book: "Libro 10",
-        description: "descripcion del libro 10",
-        people : []
+        name: "Comida 10",
+        price: 56,
+        clients: []
     }
 ];
 
 const usersSeed = [
     {
         name: "Marcos Silva",
+        rut: "19345234-5",
         faculty: "Informatica",
-        date_last_reserve: new Date(),
-        cant_reserves_last_mont: 0,
-        reserves: []
+        totalLastMonth: 0,
+        dishes: []
     },
     {
         name: "Juan Perez",
-        faculty: "Geologia",
-        date_last_reserve: new Date(),
-        cant_reserves_last_mont: 0,
-        reserves: []
+        rut: "19345634-9",
+        faculty: "Biologia",
+        totalLastMonth: 0,
+        dishes: []
     },
     {
-        name: "Pedro Gonzalez",
+        name: "Fabian Ramirez",
+        rut: "19323234-5",
         faculty: "Informatica",
-        date_last_reserve: new Date(),
-        cant_reserves_last_mont: 0,
-        reserves: []
+        totalLastMonth: 0,
+        dishes: []
     }
 ];
 
@@ -100,9 +90,9 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(async () => {
-    // Guarda los nuevos libros y usuarios en la base de datos, sin ninguna relación entre ellos
-    await Book.deleteMany({});
-    const newBooks = await Book.insertMany(booksSeed);
+    // Guarda los nuevos usuarios y comidas en la base de datos, sin ninguna relación entre ellos
+    await Dish.deleteMany({});
+    const newDishes = await Dish.insertMany(dishesSeed);
     console.log('Books Seeded!');
 
     await User.deleteMany({});
@@ -112,40 +102,48 @@ mongoose
     // Simulación de la relación entre libros y usuarios
     for (const user of newUsers) {
         if(user.name !== "Marcos Silva"){
-            const randomBook = newBooks[Math.floor(Math.random() * newBooks.length)];
-            user.reserves.push(randomBook);//Le asigna un libro aleatorio a cada usuario
-            user.date_last_reserve = new Date();//Le asigna la fecha actual, y en este caso tambien signifca la fecha de la ultima vez que arrendo un libro
+            const randomDish = newDishes[Math.floor(Math.random() * newDishes.length)];
+            user.dishes.push(randomDish);//Le asigna una comida aleatoria a cada usuario
             await user.save();
-            randomBook.people.push(user);//Luego al libro aleatorio seleccionado le guarda en el array people el usuario que arrendo el libro.
-            await randomBook.save();
-            await new Rental({userId: user._id, bookId: randomBook._id, date: new Date()}).save();//Guarda en la tabla Rental el usuario, el libro y la fecha en que se arrendo el libro
+            randomDish.clients.push(user);//Luego al la comida aleatorio seleccionado le guarda en el array clients el usuario que compro la comida.
+            await randomDish.save();
+            await new Rental({userId: user._id, dishId: randomDish._id, date: new Date()}).save();
         }else{
-            user.reserves.push(newBooks[5]);
-            user.reserves.push(newBooks[3]);
-            user.reserves.push(newBooks[9]);
-            user.date_last_reserve = new Date();
+            user.dishes.push(newDishes[5]);
+            user.dishes.push(newDishes[3]);
+            user.dishes.push(newDishes[9]);
             await user.save();
-            newBooks[5].people.push(user);
-            newBooks[3].people.push(user);
-            newBooks[9].people.push(user);
-            await newBooks[5].save();
-            await newBooks[3].save();
-            await newBooks[9].save();
-            await new Rental({userId: user._id, bookId: newBooks[5]._id, date: new Date()}).save();
-            await new Rental({userId: user._id, bookId: newBooks[3]._id, date: new Date()}).save();
-            await new Rental({userId: user._id, bookId: newBooks[9]._id, date: new Date()}).save();
+            newDishes[5].clients.push(user);
+            newDishes[3].clients.push(user);
+            newDishes[9].clients.push(user);
+            await newDishes[5].save();
+            await newDishes[3].save();
+            await newDishes[9].save();
+            await new Rental({userId: user._id, dishId: newDishes[5]._id, date: new Date()}).save();
+            await new Rental({userId: user._id, dishId: newDishes[3]._id, date: new Date()}).save();
+            await new Rental({userId: user._id, dishId: newDishes[9]._id, date: new Date()}).save();
             
         }
         
     }
 
-    console.log('Books and Users Seeded!');
-    console.log("Calculating the number of books rented by each user in the last month");
+    console.log('Dishes and Users Seeded!');
+    console.log("Calculating the number of dishes bought by each user in the last month");
 
     //Get the quiantity of books rented by each user in the last month
     for (const user of newUsers) {
-        user.cant_reserves_last_mont = await Rental.countDocuments({userId: user._id, date: {$gte: new Date(new Date().setMonth(new Date().getMonth() - 1))}});//Cuenta la cantidad de libros arrendados por cada usuario en el ultimo mes
+        const userDishes = await Rental.find({userId: user._id, date: {$gte: new Date(new Date().setMonth(new Date().getMonth() - 1))}}).populate('dishId');
+        let total = 0;
+        console.log("-------------");
+
+        userDishes.map(async (dish)=>{
+            total = total + dish.dishId.price;
+        })
+        console.log(total);
+
+        user.totalLastMonth = total;
         await user.save();
+        
     }
   })
   .then(() => {

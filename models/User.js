@@ -3,10 +3,10 @@ const { Schema } = mongoose;
 
 const UserSchema = new mongoose.Schema({
   name: String,
+  rut: String,
   faculty: String,
-  date_last_reserve: Date,
-  cant_reserves_last_mont: Number,
-  reserves: [{ type: Schema.Types.ObjectId, ref: "Book" }],
+  totalLastMonth: Number,
+  dishes: [{ type: Schema.Types.ObjectId, ref: "Dish" }],
 });
 
 const User = mongoose.model("User", UserSchema);
